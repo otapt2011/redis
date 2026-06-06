@@ -88,7 +88,9 @@ export default async function handler(req, res) {
       console.error('Failed to get queue length:', err);
     }
 
-    return res.status(200).json({ status, results, totalResults: results.length, queueLength });
+    const totalUsernames = await redis.get('tiktok:total');
+// then in the response:
+    return res.status(200).json({ status, results, totalResults: results.length, queueLength, totalUsernames });
   } catch (err) {
     console.error('Unhandled error in results handler:', err);
     // Absolute fallback – never return a 500
