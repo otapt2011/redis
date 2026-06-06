@@ -36,6 +36,8 @@ export default async function handler(req, res) {
             return res.status(400).json({ error: 'no valid usernames' });
         }
 
+        await redis.set('tiktok:total', usernames.length);
+
         const initialStatus = {
             total: usernames.length,
             pending: 0,
