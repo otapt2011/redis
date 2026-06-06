@@ -43,6 +43,7 @@ export default async function handler(req, res) {
     let status = null;
     try {
       const statusRaw = await redis.get(STATUS_KEY);
+      const queueLength = await redis.llen(QUEUE_KEY);
       if (statusRaw) {
         status = JSON.parse(statusRaw);
       }
@@ -77,7 +78,7 @@ export default async function handler(req, res) {
       }
     }
 
-    return res.status(200).json({ status, results, totalResults: results.length });
+    return res.status(200).json({ status, results, totalResults: results.length, queueLength });
   } catch (err) {
     console.error('Unhandled error in results handler:', err);
     // Return a safe fallback, never a 500
